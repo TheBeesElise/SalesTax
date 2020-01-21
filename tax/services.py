@@ -1,6 +1,6 @@
 from sys import stdout
 
-from SalesTax.sales_tax.models import Product
+from SalesTax.tax.models import Product
 
 
 def read_line(input_string):
