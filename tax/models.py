@@ -1,9 +1,9 @@
-from django.db import models
+class Tax():
+    __slots__ = ['title', '_rate']
 
-
-class Tax(models.Model):
-    title = models.CharField(max_length=32)
-    _rate = models.IntegerField()
+    def __init__(self, **kwargs):
+        self.title = kwargs['title']
+        self._rate = kwargs['_rate']
 
     def __repr__(self):
         return f"title: {self.title}, rate: {self.rate * 100}%"
@@ -13,20 +13,32 @@ class Tax(models.Model):
         return self._rate / 100
 
 
-class Keyword(models.Model):
-    word = models.CharField(max_length=32)
-    taxes = models.ManyToManyField(Tax, related_name="products")
+class Keyword():
+    __slots__ = ['word', '_taxes']
+
+    def __init__(self, **kwargs):
+        self.word = kwargs['word']
+        self._taxes = kwargs['taxes']
 
     @property
     def total_tax_amount(self):
-        return sum(tax.rate for tax in self.taxes.all())
+        return sum(tax.rate for tax in self.taxes)
 
     def __repr__(self):
         tab = '\t'
-        return f"\nword: {self.word},\ntaxes:\n{''.join(f'{tab}{repr(tax)}' for tax in self.taxes.all())}\n"
+        return f"\nword: {self.word},\ntaxes:\n{''.join(f'{tab}{repr(tax.obj)}' for tax in self.taxes)}\n"
 
+    @property
+    def taxes(self):
+        from SalesTax.db import Taxes
+        result = []
+        for tax in self._taxes:
+            result += Taxes.find_all(title=tax)
+        return result
 
 class Product():
+    __slots__ = ['keywords', 'count', 'base_cost']
+
     def __init__(self, count, keywords, base_cost):
         self.keywords = keywords
         self.count = count

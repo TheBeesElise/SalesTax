@@ -1,24 +1,16 @@
 from SalesTax.start_session import start_session
-start_session()
-
-import os
+from os import walk
 from filecmp import cmp as compare
 from re import search
-
-from django import setup
 import unittest
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', "orm.settings")
-setup()
-
-from SalesTax.tax.services import read_receipt, write_receipt
+from SalesTax.tax.services import *
 
 TEST_DIR = '/Users/ryanchilds/Practice/CodeClub/SalesTax/tests'
 
 
-def find_test_files():
+def find_test_files(file_list):
     pattern = r'(test[0-9]).txt'
-    return [file for _, _, files in os.walk(TEST_DIR) for file in files if search(pattern, file)]
+    return [file for file in file_list if search(pattern, file)]
 
 
 def parse_list(test_list):
@@ -43,11 +35,15 @@ def find_expected_files(file_list):
 
 class FileTests(unittest.TestCase):
     def test_files(self):
-        _, _, files = next(os.walk(TEST_DIR))
-        input_files = find_test_files()
+        _, _, files = next(walk(TEST_DIR))
+        files = [TEST_DIR + f'/{file}' for file in files]
+        input_files = find_test_files(files)
         actuals = []
         for filepath in input_files:
-            actuals.append(write_receipt(read_receipt(filepath), filepath))
+            try:
+                actuals.append(write_receipt(read_receipt(filepath), filepath))
+            except ValueError:
+                self.assertTrue(True)
 
         expecteds = find_expected_files(files)
         for index in range(len(actuals)):
@@ -56,3 +52,9 @@ class FileTests(unittest.TestCase):
                     self.assertFalse(compare(actuals[index], expecteds[index]))
             else:
                 self.assertTrue(compare(actuals[index], expecteds[index]))
+
+
+start_session()
+
+ft = FileTests()
+ft.test_files()

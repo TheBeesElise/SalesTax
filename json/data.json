@@ -1,0 +1,1 @@
+{"Tax": {"0": {"title": "luxury", "_rate": 10}, "1": {"title": "import", "_rate": 5}}, "Keyword": {"0": {"word": "CD", "taxes": ["luxury"]}, "1": {"word": "music", "taxes": ["luxury"]}, "2": {"word": "perfume", "taxes": ["luxury"]}, "3": {"word": "imported", "taxes": ["import"]}}}
