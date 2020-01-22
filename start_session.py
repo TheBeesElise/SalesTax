@@ -2,8 +2,9 @@ from json import loads, dumps
 
 
 def seed():
+    """populates the JSON Data file if it is empty based on a default dictionary"""
     defaults = {
-        'Tax':{
+        'Tax': {
             0: {
                 "title": 'luxury',
                 '_rate': 10
@@ -40,10 +41,11 @@ def seed():
             data_file.write(dumps(defaults))
             print("database seeded")
     else:
-        print("database exists")
+        print("database found")
 
 
 def start_session():
+    """seeds, reads, and proceeds with the JSON data"""
     from SalesTax.dataset import DataSet
 
     MODEL_SCOPE = 'SalesTax.tax.models.'

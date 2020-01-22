@@ -1,7 +1,7 @@
-1 encyclopedia set: 200.00
-1 imported CD: 23.00
-2 music anthology: 220.00
-3 bag of imported chips: 15.75
-5 egg: 0.50
-Sales Taxes: 23.75
-Total: 459.25
+1 encyclopedia set: $200.00
+1 imported CD: $23.00
+2 music anthology: $220.00
+3 bag of imported chips: $15.75
+5 egg: $0.50
+Sales Taxes: $23.75
+Total: $459.25

@@ -2,12 +2,14 @@ from pydoc import locate
 
 
 def get_class_name(obj_type):
+    """gets the literal name from a class type"""
     return obj_type.__class__.strip("<class '", "'>")
 
 
 class DataSet:
-
+    """Stores and handles the searching of a collection of data objects"""
     class DataObj:
+        """Wraps a class object and associates it with a pk for indexing in a DataSet"""
         __slots__ = ['pk', 'obj']
 
         def __init__(self, obj, pk):
@@ -48,6 +50,7 @@ class DataSet:
         self.pk_gen = self.next_pk()
 
     def next_pk(self):
+        """Generates the next logical pk based on the current contents of the DataSet"""
         pk = 0
         while True:
             while pk in [obj.pk for obj in self.dset]:
@@ -61,31 +64,35 @@ class DataSet:
         return str(self)
 
     def create(self, pk=None, **kwargs):
+        """Adds a new DataObj to a DataSet. To use, pass each attribute and its desired value as kwargs"""
         pk = pk or next(self.pk_gen)
         obj = self.cls(**kwargs)
         dobj = self.DataObj(obj, pk)
         self.dset.add(dobj)
 
     def delete(self, pk):
+        """Removes an entry from the DataSet"""
         for obj in self.dset:
             if obj.pk == pk:
                 self.dset.remove(obj)
 
     def serialize(self):
+        """Generates a JSON-compatible dictionary based on the contents of a DataSet"""
         cls_name = get_class_name(self.cls)
         return {
-            cls_name: {key: value for item in self.dset for key, value in vars(item)}
+            cls_name: {
+                dobj.pk: {
+                    key: value for item in self.dset for key, value in vars(item.obj)
+                } for dobj in self.dset}
         }
 
     def all(self):
+        """gets a list of all elements in the DataSet"""
         return [dobj for dobj in self.dset]
 
-    def filter(self, **kwargs):
-        base = self.all()
-        for key, value in kwargs.items():
-            base = [e for e in base if getattr(self, key) == value]
 
-    def find_all(self, **kwargs):
+    def filter(self, **kwargs):
+        """Finds all elements in a DataSet that match a given kwarg condition"""
         out = []
         for dobj in self.dset:
             if all(getattr(dobj, key) == value for key, value in kwargs.items()):
