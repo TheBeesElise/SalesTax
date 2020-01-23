@@ -34,7 +34,7 @@ def seed():
 
         }
     }
-    with open("json/data.json", 'r') as data_file:
+    with open("/Users/ryanchilds/Practice/CodeClub/SalesTax/database/data.json", 'r') as data_file:
         data_str = data_file.read()
     if not data_str:
         with open("json/data.json", 'w') as data_file:
@@ -46,17 +46,17 @@ def seed():
 
 def start_session():
     """seeds, reads, and proceeds with the JSON data"""
-    from SalesTax.dataset import DataSet
+    from SalesTax.models.dataset import DataSet
 
-    MODEL_SCOPE = 'SalesTax.tax.models.'
+    MODEL_SCOPE = 'SalesTax.models.'
 
     seed()
-    with open("/Users/ryanchilds/Practice/CodeClub/SalesTax/json/data.json", 'r') as data_file:
+    with open("/Users/ryanchilds/Practice/CodeClub/SalesTax/database/data.json", 'r') as data_file:
         data_str = data_file.read()
     data_dict = loads(data_str)
     out = {}
     for table in data_dict:
-        out[table] = DataSet(MODEL_SCOPE + table)
+        out[table] = DataSet(MODEL_SCOPE + f'{table.lower()}.{table}')
         for row in data_dict[table]:
             out[table].create(pk=row, **dict(data_dict[table][row].items()))
 

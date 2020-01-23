@@ -1,0 +1,4 @@
+tests/files/output/*
+!tests/files/output/.gitkeep
+
+

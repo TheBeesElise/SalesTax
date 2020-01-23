@@ -1,9 +1,6 @@
 from pydoc import locate
 
-
-def get_class_name(obj_type):
-    """gets the literal name from a class type"""
-    return obj_type.__class__.strip("<class '", "'>")
+from SalesTax.services.dataset import get_class_name
 
 
 class DataSet:
@@ -43,7 +40,6 @@ class DataSet:
     __slots__ = ['cls', 'dset', 'pk_gen']
 
     def __init__(self, obj_cls_str):
-        from SalesTax.tax.models import Tax, Keyword
 
         self.cls = locate(obj_cls_str)
         self.dset = set()

@@ -1,0 +1,8 @@
+I encyclopedia set at 199.99
+1 at 19.99
+at 99.99
+-1 imported eggs at 101.01
+0.1 whole chickens at 5.00
+1 refund at -9999999.99
+
+1 passing tests at priceless
